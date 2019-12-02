@@ -26,6 +26,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 		//	接收文件流已经存储到本地目录
 		file, head, err := r.FormFile("file")
+		print("上传文件,,,,")
 		if err != nil {
 			fmt.Printf("Failed to get data, err: %s", err.Error())
 			return
