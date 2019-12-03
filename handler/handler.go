@@ -56,8 +56,8 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 		newFile.Seek(0, 0)
 		fileMeta.FileSha1 = util.FileSha1(newFile)
-		meta.UpdateFileMeta(fileMeta)
-
+		//meta.UpdateFileMeta(fileMeta)
+		_ = meta.UpdateFileMetaDB(fileMeta)
 		http.Redirect(w, r, "/file/upload/success", http.StatusFound)
 	}
 }
@@ -72,7 +72,12 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	filehash := r.Form["filehash"][0]
-	fMeta := meta.GetFileMeta(filehash)
+	//fMeta := meta.GetFileMeta(filehash)
+	fMeta, err := meta.GetFileMetaDB(filehash)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	data, err := json.Marshal(fMeta)
 	if err != nil {
@@ -87,7 +92,13 @@ func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	limitCnt, _ := strconv.Atoi(r.Form.Get("limit"))
-	fileMetas := meta.GetLastFileMetas(limitCnt)
+	//fileMetas := meta.GetLastFileMetas(limitCnt)
+	fileMetas, err := meta.GetLastFileMetasDB(limitCnt)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	data, err := json.Marshal(fileMetas)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -100,7 +111,11 @@ func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fsha1 := r.Form.Get("filehash")
-	fm := meta.GetFileMeta(fsha1)
+	fm, err := meta.GetFileMetaDB(fsha1)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	f, err := os.Open(fm.Location)
 	if err != nil {
