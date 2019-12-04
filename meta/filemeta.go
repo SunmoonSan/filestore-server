@@ -1,7 +1,7 @@
 package meta
 
 import (
-	mydb "filestore-server/handler/db"
+	mydb "filestore-server/db"
 	"sort"
 )
 
