@@ -9,7 +9,7 @@ import (
 func main() {
 
 	// 静态资源处理
-	http.StripPrefix("/static/", http.FileServer(http.Dir("./static")))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	// 动态端口路由设置
 	http.HandleFunc("/file/upload", handler.UploadHandler)
@@ -19,6 +19,11 @@ func main() {
 	http.HandleFunc("/file/download", handler.DownloadHandler)
 	http.HandleFunc("/file/update", handler.FileMetaUpdateHandler)
 	http.HandleFunc("/file/delete", handler.FileDeleteHandler)
+
+	// 用户相关接口
+	http.HandleFunc("/user/signup", handler.SignupHandler)
+	http.HandleFunc("/user/signin", handler.SignInHandler)
+	http.HandleFunc("/user/info", handler.HTTPInterceptor(handler.UserInfoHandler))
 
 	// 监听端口
 	fmt.Println("上传服务正在启动, 监听端口: 8080...")
