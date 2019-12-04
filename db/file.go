@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	mydb "filestore-server/handler/db/mysql"
+	mydb "filestore-server/db/mysql"
 	"fmt"
 )
 

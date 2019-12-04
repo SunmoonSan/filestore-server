@@ -1,8 +1,7 @@
 package db
 
 import (
-	"filestore-server/handler/db/mysql"
-	mydb "filestore-server/handler/db/mysql"
+	mydb "filestore-server/db/mysql"
 	"fmt"
 )
 
@@ -17,7 +16,7 @@ type User struct {
 
 // 通用用户以及密码完成user表的注册操作
 func UserSignup(username string, password string) bool {
-	stmt, err := mysql.DBConn().Prepare("insert ignore into tbl_user (`user_name`,`user_pwd`) values (?,?)")
+	stmt, err := mydb.DBConn().Prepare("insert ignore into tbl_user (`user_name`,`user_pwd`) values (?,?)")
 	if err != nil {
 		fmt.Println("Failed to insert, err:", err.Error())
 		return false
@@ -38,7 +37,7 @@ func UserSignup(username string, password string) bool {
 
 // 判断密码是否一致
 func UserSignin(username string, encpwd string) bool {
-	stmt, err := mysql.DBConn().Prepare("select * from tbl_user where user_name=? limit 1")
+	stmt, err := mydb.DBConn().Prepare("select * from tbl_user where user_name=? limit 1")
 	if err != nil {
 		fmt.Println(err.Error())
 		return false
