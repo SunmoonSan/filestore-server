@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// 文件上传
+// UploadHandler 文件上传
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		//	返回上传的HTML页面
@@ -26,7 +26,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 		//	接收文件流已经存储到本地目录
 		file, head, err := r.FormFile("file")
-		print("上传文件,,,,")
 		if err != nil {
 			fmt.Printf("Failed to get data, err: %s", err.Error())
 			return
@@ -62,12 +61,12 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// 上传完成
+// UploadSucHandler 上传完成
 func UploadSucHandler(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "Upload finished !")
 }
 
-// GetFileMetaHandler: 获取文件元信息
+// GetFileMetaHandler 获取文件元信息
 func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -87,7 +86,7 @@ func GetFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// 查询批量的文件元信息
+// FileQueryHandler 查询批量的文件元信息
 func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -107,7 +106,7 @@ func FileQueryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// 文件下载接口
+// DownloadHandler 文件下载接口
 func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fsha1 := r.Form.Get("filehash")
@@ -136,7 +135,7 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// 更新元信息接口(重命名)
+// FileMetaUpdateHandler 更新元信息接口(重命名)
 func FileMetaUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -168,7 +167,7 @@ func FileMetaUpdateHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// 删除文件及元信息
+// FileDeleteHandler 删除文件及元信息
 func FileDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
